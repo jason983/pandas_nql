@@ -1,0 +1,14 @@
+README.md
+setup.py
+pandas_nql/__init__.py
+pandas_nql/openai_api_client.py
+pandas_nql/openai_sql_generator.py
+pandas_nql/pandas_nql.py
+pandas_nql/sql_generator_base.py
+pandas_nql.egg-info/PKG-INFO
+pandas_nql.egg-info/SOURCES.txt
+pandas_nql.egg-info/dependency_links.txt
+pandas_nql.egg-info/requires.txt
+pandas_nql.egg-info/top_level.txt
+tests/__init__.py
+tests/pandas_nql_tests.py
