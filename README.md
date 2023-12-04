@@ -1,7 +1,7 @@
 # Pandas Natural Language Query (NQL) Library
 Pandas_nql is an open source Python library that enables natural language queries on Pandas Dataframes using the latest advances in generative AI. Inspired by OpenAI's groundbreaking language models, pandas_nql allows users to analyze data in a more intuitive way - by simply asking questions in plain English instead of writing complex code.
 
-This library is perfect for data scientists, analysts, and developers looking to enhance their data analysis workflows. By leveraging the power of GPT and other language models behind the scenes, pandas_nql can understand complex data questions and automatically translate them into optimized Pandas statements to extract insights from data.
+This library is perfect for data scientists, analysts, and developers looking to enhance their data analysis workflows. By leveraging the power of GPT and other language models behind the scenes, pandas_nql can understand complex data questions and automatically translate them into sql statements to extract insights from data.
 
 Whether you're a Python expert looking to save time or someone new to data analysis, pandas_nql makes exploring datasets more accessible. It's as simple as pip installing the library and typing a query like "show me average monthly sales by region." You'll feel like you have a personal AI-powered data analyst at your fingertips!
 
