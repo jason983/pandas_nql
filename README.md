@@ -15,7 +15,6 @@ Some key features:
 Bring natural language queries to your data analysis today with the power of pandas_nql!
 
 ### Disclaimers
-- PyPi is not accepting new registraions at this time so I can't upload the package for easy installation. Going to add to the test site for now.
 - So you aware, your data is never sent to the language model for query creation, however, the schema of the data is sent and used. 
 - Typical AI warning - AI can make mistakes. Consider checking important information.
 

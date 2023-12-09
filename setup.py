@@ -15,7 +15,7 @@ with open(path.join(HERE, 'README.md'), encoding='utf-8') as f:
 # This call to setup() does all the work
 setup(
     name="pandas_nql",
-    version="0.3.0",
+    version="1.0.0",
     description="Pandas_nql is an open source Python library that enables natural language queries on Pandas Dataframes using the latest advances in generative AI. Inspired by OpenAI's groundbreaking language models, pandas_nql allows users to analyze data in a more intuitive way - by simply asking questions in plain English instead of writing complex code.",
     long_description=long_description,
     long_description_content_type="text/markdown",
