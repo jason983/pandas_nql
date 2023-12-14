@@ -47,7 +47,7 @@ df = pd.DataFrame(data)
 pandas_nql = PandasNQL(df)
 
 # Call the query method to select data
-results_df = pandas_nql.query("Show me the average age of people in Denver.")
+results_df = pandas_nql.query("Find the number of people in each City.")
 
 print(results_df)
 
@@ -55,10 +55,32 @@ print(results_df)
 
 ```
 
-### Generators
-Allows for custom sql statement generators. The default uses OpenAI.
+### Sql Generators
+Generates the sql statement used to query the data. The statemens isgenerated using the schema of the data and the given natural language query. 
+The default sql statement generator is OpenAI. You can override the default with another generator, such as the Hugging Face T5 sql statement generator, or create your own. 
+While the Hugging Face T5 generator is not not as accurate as OpenAI, it is free.
 
-#### Write custom generator
+#### Use the T5 sql statement generator
+```Python
+import pandas as pd
+from pands_nql import PandasNQL, T5SqlGenerator
+
+# load Dataframe
+df = ...
+
+# instantiate custom generator
+t5_sql_generator = T5SqlGenerator(...)
+
+# Instantiate PandasNQL with data
+pandas_nql = PandasNQL(df, generator=t5_sql_generator)
+
+# Call the query method to select data
+results_df = pandas_nql.query("Find the number of people in each City.")
+
+print(results_df)
+```
+
+#### Write your own sql statement generator
 
 ```Python
 from generators import SqlStatementGeneratorBase
@@ -75,23 +97,72 @@ class CustomSqlGenerator(SqlGeneratorBase):
         # return sql statement
 ```
 
-#### Use custom generator
+#### Update __init__.py
+from pandas_nql.custom_sql_generator import CustomSqlGenerator
+
+#### Use the custom sql statement generator
 
 ```Python
 import pandas as pd
-from pands_nql import PandasNQL
+from pands_nql import PandasNQL, CustomSqlGenerator
 
 # load Dataframe
 df = ...
 
-# instatiate custom generator
+# instantiate custom generator
 custom_generator = CustomSqlGenerator(...)
 
 # Instantiate PandasNQL with data
 pandas_nql = PandasNQL(df, generator=custom_generator)
 
 # Call the query method to select data
-results_df = pandas_nql.query("Show me the average age of people in Denver.")
+results_df = pandas_nql.query("Find the number of people in each City.")
+
+print(results_df)
+```
+
+### Schema String Builders
+Schema String Builders build strings representing the schema of a provided Pandas DataFrame. The default builder is the Sql Schema String Builder. This builder returns the schema string in the format: column_name sql_data_type (i.e.: City varchar(255)). You can override the default with another builder, such as the Pandas schema string builder, or create your own. The Pandas builder uses the format: coulmn_name: pandas_data_type (i.e.: City: object)
+
+#### Write your own custom schema string builder.
+```Python
+from pandas_nql import SchemaStringBuilderBase
+
+# define custom sql stement generator class
+class CustomSchemaStringBuilderBase(SchemaStringBuilderBase):
+    
+    def __init__(self, ...):
+        super().__init__()        
+
+    # override generate_sql method
+    def build_schema_string(self, dtypes: pd.Series) -> str:
+        # build schema string
+        # return schema string
+```
+
+#### Update __init__.py
+from pandas_nql.custom_schema_string_builder import CustomStringBuilder
+
+#### Use the custom schema string builder
+
+```Python
+import pandas as pd
+from pands_nql import PandasNQL, CustomSqlGenerator, CustomSchemaStringBuilder
+
+# load Dataframe
+df = ...
+
+# instantiate custom generator
+custom_generator = CustomSqlGenerator(...)
+custom_schema_builder = CustomSchemaStringBuilder(...)
+
+# Instantiate PandasNQL with data
+pandas_nql = PandasNQL(df, 
+                        generator=custom_generator, 
+                        schema_builder=custom_schema_builder)
+
+# Call the query method to select data
+results_df = pandas_nql.query("Find the number of people in each City.")
 
 print(results_df)
 ```

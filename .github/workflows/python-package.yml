@@ -39,4 +39,5 @@ jobs:
       env:
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       run: |
-        pytest tests/pandas_nql_tests.py 
+        pytest tests/pandas_nql_hf_tests.py 
+        pytest tests/pandas_nql_openai_tests.py 

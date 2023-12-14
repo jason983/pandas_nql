@@ -1,12 +1,15 @@
 import pandas as pd
 import duckdb
-from pandas_nql import SqlGeneratorBase
-from pandas_nql import OpenAISqlGenerator
+from pandas_nql import SqlGeneratorBase, \
+                        OpenAISqlGenerator, \
+                        SchemaStringBuilderBase, \
+                        SqlSchemaStringBuilder
 
 TEMP_VIEW_NAME = "data_view"
 DEFAULT_MAX_RETRIES = 3
 
 DEFAULT_GENERATOR = OpenAISqlGenerator()
+DEFAULT_SCHEMA_BUILDER = SqlSchemaStringBuilder()
 
 class PandasNQL:
     """
@@ -24,7 +27,11 @@ class PandasNQL:
     :default generator: OpenAISqlGenerator
     """
 
-    def __init__(self, df: pd.DataFrame, max_retries: int = DEFAULT_MAX_RETRIES, generator: SqlGeneratorBase = DEFAULT_GENERATOR):
+    def __init__(self, 
+                 df: pd.DataFrame, 
+                 max_retries: int = DEFAULT_MAX_RETRIES, 
+                 generator: SqlGeneratorBase = DEFAULT_GENERATOR,
+                 schema_builder: SchemaStringBuilderBase = DEFAULT_SCHEMA_BUILDER):
         try:
             if (df.empty):
                 raise ValueError("Pandas Dataframe is required.")
@@ -34,22 +41,7 @@ class PandasNQL:
         self.df = df
         self.max_retries = max_retries
         self.generator = generator
-
-    def get_schema_string(self) -> str:
-        """
-        Gets the schema of a Pandas Dataframe and converts to a formatted string
-
-        :return: Formatted schema of the Pandas Dataframe
-        :rtype: str
-        """
-        schema_string = ""
-        for column_name, data_type in self.df.dtypes.items():
-            schema_string += f"{column_name}: {data_type}, "
-
-        # Remove the trailing comma and whitespace
-        schema_string = schema_string[:-2]
-
-        return schema_string
+        self.schema_builder = schema_builder
 
     def query(self, query: str) -> (pd.DataFrame, str):
         """
@@ -62,7 +54,7 @@ class PandasNQL:
         :rtype: (Dataframe, str)
         """    
         
-        schema = self.get_schema_string()
+        schema = self.schema_builder.build_schema_string(self.df.dtypes)
 
         # Connect to the DuckDB database
         con = duckdb.connect(database=':memory:')
